@@ -1,0 +1,61 @@
+/* Bitrix24 Style Refined CSS */
+:root {
+    --bg-dark: #0f172a;
+    --card-dark: #1e293b;
+    --border-dark: #334155;
+    --accent: #3b82f6;
+    --accent-glow: rgba(59, 130, 246, 0.3);
+}
+
+body { background: var(--bg-dark); color: #f8fafc; font-family: 'Inter', sans-serif; overflow: hidden; }
+
+/* Custom Scroll */
+.custom-scroll::-webkit-scrollbar { width: 4px; height: 4px; }
+.custom-scroll::-webkit-scrollbar-thumb { background: #334155; border-radius: 10px; }
+
+/* Side Panel style detail modal */
+.side-panel {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 60%;
+    height: 100vh;
+    background: var(--darkCard);
+    border-left: 1px solid var(--border-dark);
+    z-index: 120;
+    box-shadow: -20px 0 50px rgba(0,0,0,0.5);
+    transform: translateX(100%);
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    display: flex;
+    flex-direction: column;
+}
+
+.side-panel.open { transform: translateX(0); }
+
+.side-panel-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.5);
+    backdrop-filter: blur(4px);
+    z-index: 115;
+    display: none;
+}
+.side-panel-overlay.open { display: block; }
+
+/* Cards */
+.order-card {
+    background: var(--card-dark);
+    border: 1px solid var(--border-dark);
+    border-radius: 1.25rem;
+    padding: 1.25rem;
+    transition: all 0.2s ease;
+    cursor: grab;
+}
+.order-card:hover { border-color: var(--accent); box-shadow: 0 10px 20px -5px rgba(0,0,0,0.3); }
+
+/* Activity Log */
+.audit-item { position: relative; padding-left: 1.5rem; border-left: 2px solid #334155; margin-bottom: 1.5rem; }
+.audit-item::before { content: ''; position: absolute; left: -7px; top: 0; width: 12px; height: 12px; background: #3b82f6; border-radius: 50%; }
+
+/* Comment Box */
+.comment-bubble { background: #1a1f2e; border: 1px solid #334155; border-radius: 1rem; padding: 1rem; margin-bottom: 1rem; }
