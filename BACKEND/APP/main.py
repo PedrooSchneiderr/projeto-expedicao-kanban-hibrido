@@ -48,7 +48,7 @@ def signup(user: models.UserCreate, db: Session = Depends(database.get_db)):
 
 @app.post("/login")
 def login(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(database.get_db)):
-    user = db.query(models.User).filter(models.User.username == form_data.username).first()
+    user = db.query(models.User).filter(or_(models.User.username == form_data.username, models.User.email == form_data.username)).first()
     if not user or not auth.verify_password(form_data.password, user.password_hash): raise HTTPException(status_code=401, detail="Falha na autenticação.")
     if not user.is_active: raise HTTPException(status_code=403, detail="Acesso não autorizado.")
     access_token = auth.create_access_token(data={"sub": user.username})
