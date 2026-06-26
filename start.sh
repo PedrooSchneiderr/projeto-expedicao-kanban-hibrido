@@ -12,7 +12,7 @@ fi
 
 # 2. Ativa o ambiente virtual
 echo "🔄 Ativando ambiente virtual..."
-source venv/bin/activate
+. venv/bin/activate
 
 # 3. Instala as dependências de forma silenciosa (para ser rápido)
 echo "📥 Verificando dependências..."

@@ -3,8 +3,8 @@ import sys
 from datetime import datetime, timedelta
 import random
 
-BASE_DIR_PATH = "/mnt/c/Arquivos/ARQUIVOS-FACUL/SOFT/PROJETO-EXPEDICAO-KANBAN"
-sys.path.append(os.path.join(BASE_DIR_PATH, "BACKEND"))
+current_dir = os.path.dirname(os.path.abspath(__file__))
+sys.path.append(os.path.join(current_dir, "BACKEND"))
 
 from APP.database import SessionLocal, engine, Base
 from APP import models, auth
@@ -19,7 +19,7 @@ def seed():
     
     # 1. Usuários
     users_data = [
-        {"u": "pedro", "e": "pedro@tspddevs.com.br", "p": "0406", "r": "superadmin"},
+        {"u": "pedro", "e": "pedro@tspdevs.com", "p": "1111", "r": "superadmin"},
         {"u": "SISTEMA_BOT", "e": "bot@tspddevs.com.br", "p": "bot123", "r": "bot"},
         {"u": "marcos", "e": "marcos@tspddevs.com.br", "p": "123", "r": "operator"}
     ]
