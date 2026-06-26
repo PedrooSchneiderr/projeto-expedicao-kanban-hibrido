@@ -7,13 +7,17 @@ import os
 # VERSÃO EXCLUSIVA PARA POSTGRESQL (OPÇÃO 1)
 db_url = os.getenv("DATABASE_URL")
 if not db_url:
-    raise ValueError("ERRO: DATABASE_URL não foi definida. Para a versão Postgres, é obrigatório configurar no painel da Vercel!")
+    print("AVISO: DATABASE_URL não definida. Usando banco SQLite efêmero em /tmp para rodar no Vercel.")
+    db_url = "sqlite:////tmp/database.db"
 
 if db_url.startswith("postgres://"):
     db_url = db_url.replace("postgres://", "postgresql://", 1)
 
 SQLALCHEMY_DATABASE_URL = db_url
-engine = create_engine(SQLALCHEMY_DATABASE_URL)
+if db_url.startswith("sqlite"):
+    engine = create_engine(SQLALCHEMY_DATABASE_URL, connect_args={"check_same_thread": False})
+else:
+    engine = create_engine(SQLALCHEMY_DATABASE_URL)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 Base = declarative_base()
 
