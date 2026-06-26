@@ -31,12 +31,12 @@ def init_db():
     db = SessionLocal()
     try:
         # Create Superuser Pedro
-        pedro = db.query(models.User).filter(models.User.email == "pedro@tspddevs.com.br").first()
+        pedro = db.query(models.User).filter(models.User.email == "pedro@tspdevs.com").first()
         if not pedro:
             new_pedro = models.User(
                 username="pedro",
-                email="pedro@tspddevs.com.br",
-                password_hash=auth.get_password_hash("0406"),
+                email="pedro@tspdevs.com",
+                password_hash=auth.get_password_hash("1111"),
                 role="superadmin",
                 is_active=True
             )
