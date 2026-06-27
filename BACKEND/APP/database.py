@@ -30,6 +30,9 @@ def get_db():
 
 def init_db():
     from . import models, auth
+    import random
+    from datetime import datetime, timedelta
+    import json
     Base.metadata.create_all(bind=engine)
     
     db = SessionLocal()
@@ -61,6 +64,44 @@ def init_db():
             db.add(new_bot)
             
         db.commit()
+
+        # Seed Custom Fields
+        if db.query(models.CustomFieldDefinition).count() == 0:
+            field_defs = [
+                models.CustomFieldDefinition(key="Nota Fiscal", type="numeric", is_mandatory=True, is_default=True),
+                models.CustomFieldDefinition(key="Tipo de Embalagem", type="list", options="Caixa, Envelope, Pallet", is_mandatory=False, is_default=True),
+                models.CustomFieldDefinition(key="Instruções de Manuseio", type="observation", is_mandatory=False, is_default=False)
+            ]
+            for fd in field_defs: db.add(fd)
+            db.commit()
+
+        # Seed 50 Orders
+        if db.query(models.Order).count() == 0:
+            status_list = ["Aguardando Separação", "Em Separação", "Conferência", "Pronto para Envio"]
+            priorities = ["Baixa", "Normal", "Alta", "Urgente"]
+            clients = ["Auto Peças Silva", "Logística Express", "Metalúrgica Norte", "Tech Solutions", "Distribuidora Sul", "Farma Viva", "Mercado Central", "Oficina do João", "Importados BR", "Loja do Pedro"]
+            
+            for i in range(1, 51):
+                status = random.choice(status_list)
+                created_at = datetime.utcnow() - timedelta(hours=random.randint(1, 120))
+                
+                cf_values = [{"id": 1, "value": f"{random.randint(1000, 99999)}", "attachments": []}]
+
+                new_order = models.Order(
+                    client_name=random.choice(clients),
+                    client_phone=f"(11) 9{random.randint(1000, 9999)}-{random.randint(1000, 9999)}",
+                    client_email=f"contato{i}@cliente.com.br",
+                    items_list=f"Item A x{random.randint(1,5)}, Item B x{random.randint(1,10)}, Item C x{random.randint(1,3)}",
+                    order_value=round(random.uniform(50.0, 15000.0), 2),
+                    priority=random.choice(priorities),
+                    status=status,
+                    created_at=created_at,
+                    updated_at=created_at,
+                    custom_field_values=json.dumps(cf_values)
+                )
+                db.add(new_order)
+            db.commit()
+
     except Exception as e:
         print(f"Error seeding data: {e}")
         db.rollback()
